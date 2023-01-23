@@ -1,22 +1,18 @@
 import './App.css'
-import 'quill/dist/quill.snow.css'; // Add css for snow theme
+import 'draft-js/dist/Draft.css';
 
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import html2canvas from 'html2canvas';
 import reactLogo from './assets/react.svg'
-import { useQuill } from 'react-quilljs';
 import { useState } from 'react';
-
-// or const { useQuill } = require('react-quilljs');
-
-// or import 'quill/dist/quill.bubble.css'; // Add css for bubble theme
-
 
 function App() {
   const takeScreenshots = () => {
-    const el = document.querySelector('.ql-editor').children[0];
-    console.log(el)
-    el.style.display  = 'inline-block'
-    html2canvas(el).then(function(canvas) {
+    const el = document.querySelector('.ck-content').children[0];
+    el.style.display  = 'inline'
+
+    html2canvas(document.querySelector('.ck-content').children[0]).then(function(canvas) {
         console.log(document.querySelector('#element-to-capture'));
         const url = canvas.toDataURL('image/png');
         const a = document.createElement('a');
@@ -30,12 +26,10 @@ function App() {
   const [value, setValue] = useState('')
 
   const handleOnChange = (e, editor) => {
+    // console.log('object');
+    console.log(editor.getData())
+    // const data = 
   }
-
-  const { quill, quillRef } = useQuill();
-
-  console.log(quill);    // undefined > Quill Object
-  console.log(quillRef);
 
   return (
     <div className="App">
@@ -53,10 +47,10 @@ function App() {
           Take Screenshot
         </button>
       </div>
-
-      <div style={{ width: 500, height: 300 }}>
-        <div ref={quillRef} />
-      </div>
+      <CKEditor
+        editor={ ClassicEditor }
+        onChange={ handleOnChange }
+      />
     </div>
   )
 }
